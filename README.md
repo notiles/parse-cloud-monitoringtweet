@@ -27,6 +27,6 @@ var oauth_token = "xxx";
 
 https://parse.com/docs/cloudcode/guide#command-line
 
-2- launch a new background job and schedule the job every 3 minutes.
+2- launch a new background job and schedule the twitterFeed job every 3 minutes.
 
 https://parse.com/docs/cloudcode/guide#cloud-code-advanced-background-jobs
