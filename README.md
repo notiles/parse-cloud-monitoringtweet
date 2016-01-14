@@ -23,10 +23,10 @@ var oauth_token = "xxx";
 
 # Deploy and launch monitoring on parse.com
 
-1- deploy (parse.deploy) files in cloudcode folder to your cloudcode on parse.com
+1- Deploy (parse.deploy) files in cloudcode folder to your cloudcode on parse.com
 
 https://parse.com/docs/cloudcode/guide#command-line
 
-2- launch a new background job and schedule the twitterFeed job every 3 minutes.
+2- Launch a new background job and schedule the twitterFeed job every 3 minutes.
 
 https://parse.com/docs/cloudcode/guide#cloud-code-advanced-background-jobs
