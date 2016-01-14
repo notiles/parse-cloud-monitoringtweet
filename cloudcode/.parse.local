@@ -1,0 +1,10 @@
+{
+  "applications": {
+    "TwixTweetVote": {
+      "applicationId": "2FuzTW8n1qPKHRknOmkBHShRCQAvsN87kzyhbXKW"
+    },
+    "_default": {
+      "link": "TwixTweetVote"
+    }
+  }
+}
