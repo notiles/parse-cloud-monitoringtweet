@@ -1,6 +1,6 @@
 # parse-cloud-monitoringtweet
 
-This code will help you to count numbers of tweet for 2 different hashtag, on parse.com it's really usefull for a vote system!
+This code will help you to count numbers of tweet for differents hashtags or tweets sents to people, on parse.com it's really usefull for a vote system!
 
 # Configuring your parse project
 
@@ -8,7 +8,9 @@ This code will help you to count numbers of tweet for 2 different hashtag, on pa
 
 2- Create a new project and follow instructions.
 
-3- Create a new parse object with 2 string properties named term1 & term2 it will be the hashtags to monitored
+3- Create a new parse object named BotTerms with 1 array properties named tags, you can fill this array with tag (without # or with people with @)
+
+eg. You want to track every tags #mercedesbenz and want also to track every tweet sent to a specific person like @notiles, the array tags in class BotTerms will look like that : ["mercedesbenz", "@notiles"]
 
 # Configuring the main.js file
 

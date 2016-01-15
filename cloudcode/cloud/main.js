@@ -74,6 +74,9 @@ function getTweetsNumber(params, count, lastID, isFirstPage){
                 });
             }
             else{
+                if(isFirstPage){
+                    lastID = data.statuses[0].id;
+                }
                 console.log("resolve");
                 promise.resolve({count:count+ nbTweets, lastID:lastID});
             }
@@ -88,24 +91,34 @@ function getTweetsNumber(params, count, lastID, isFirstPage){
 }
 
 function saveTerm(term){
-    console.log("saveTerm :"+term);
     return getTerm(term).then(function(tag){
+
         return getTermParam(tag,"lastID").then(function(lastID){
-            var params = "?q=%23"+tag+"&since_id="+lastID+"&count=100&result_type=recent";
+
+            var params = "";
+            if(tag[0] == "@"){
+                params = "?q=%40"+tag.split("@")[1]+"&since_id="+lastID+"&count=100&result_type=recent";
+            }
+            else{
+                params = "?q=%23"+tag+"&since_id="+lastID+"&count=100&result_type=recent";
+            }
+
             return getTweetsNumber(params, 0, lastID, true).then(function(result){
-                console.log(tag+" -> count: "+result.count+"   lastID: "+result.lastID);
+                //console.log(tag+" -> count: "+result.count+"   lastID: "+result.lastID);
 
                 return getTermObj(tag).then(function(votes){
                     votes.increment("count",result.count);
                     return votes.save({
                         lastID:result.lastID
                     }).then(function(){
-                        if(term == "term1"){
-                            return saveTerm("term2");
-                        }
-                        else{
-                            return true;
-                        }
+                        return getTermsList().then(function(tagsList){
+                             if(term < tagsList.length -1){
+                                return saveTerm(term +1);
+                            }
+                            else{
+                                return true;
+                            }
+                        });
                     })
                 })
             })
@@ -114,23 +127,39 @@ function saveTerm(term){
 }
 
 function getTermsObj(){
-    var promise = new Parse.Query("MonitoringTerms").first();
+    var promise = new Parse.Query("BotTerms").first();
     getTermsObj = function(){ return promise; }
     return promise;
 }
 
+function getTermsList(){
+    return getTermsObj().then(function(terms){
+        return terms.get("tags");
+    });
+}
+
 function getTerm(term){
     return getTermsObj().then(function(terms){
-        return terms.get(term);
+        return terms.get("tags")[term];
     });
 }
 
 function getTermObj(term){
+
+    if(term[0] == "@"){
+        term = "AT_"+term.split("@")[1];
+    }
+
     var promise = new Parse.Query(term).first();
     return promise;
 }
 
 function getTermParam(term, param){
+
+    if(term[0] == "@"){
+        term = "AT_"+term.split("@")[1];
+    }
+
     return getTermObj(term).then(function(votes){
         if(votes == undefined){
             var object = new Parse.Object(term);
@@ -154,7 +183,7 @@ Parse.Cloud.job("twitterFeed", function(request, status) {
 
    promise = promise.then(function(){
         // return getTweetsNumber(params, 0, 0, true);
-        return saveTerm("term1");
+        return saveTerm(0);
    })
 
    Parse.Promise.when(promise).then(function(result){
